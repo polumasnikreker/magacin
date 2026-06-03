@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magacin Koordinator v4.0</title>
+    <title>Sistem za Koordinaciju Skladišnog Poslovanja v5.0</title>
     <!-- Tailwind CSS za moderan i čist dizajn -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- SheetJS biblioteka za direktan izvoz u pravi Excel .xlsx fajl sa formulama -->
@@ -48,8 +48,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                 </svg>
                 <div>
-                    <h1 class="text-xl font-extrabold tracking-tight">Magacin Koordinator 4.0</h1>
-                    <p class="text-xs text-teal-100">Instalirana PWA aplikacija u realnom vremenu</p>
+                    <h1 class="text-xl font-extrabold tracking-tight">Sistem za Koordinaciju Skladišnog Poslovanja 5.0</h1>
+                    <p class="text-xs text-teal-100 font-medium">Progresivna veb aplikacija za sinhronizaciju u realnom vremenu</p>
                 </div>
             </div>
             
@@ -60,12 +60,12 @@
                         <span id="status-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                         <span id="status-dot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
                     </span>
-                    <span id="status-text" class="text-xs font-semibold text-teal-100">Povezivanje...</span>
+                    <span id="status-text" class="text-xs font-semibold text-teal-100">Uspostavljanje mrežnog protokola...</span>
                 </div>
 
                 <!-- Admin / Guest status i prekidač -->
                 <button id="admin-toggle-btn" onclick="toggleAdminMode()" class="bg-amber-500 hover:bg-amber-600 text-teal-950 text-xs px-3.5 py-1.5 rounded-lg font-bold flex items-center gap-1.5 shadow transition-all">
-                    <span id="lock-icon">🔒</span> <span id="admin-status-text">Gost (Samo čitanje)</span>
+                    <span id="lock-icon">🔒</span> <span id="admin-status-text">Gostujući režim (Samo pregled)</span>
                 </button>
             </div>
         </div>
@@ -73,13 +73,13 @@
 
     <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         
-        <!-- PWA Dugme za instalaciju (Pojavljuje se samo ako pretraživač podržava instalaciju) -->
+        <!-- PWA Dugme za instalaciju -->
         <div id="pwa-install-container" class="hidden bg-gradient-to-r from-teal-700 to-emerald-700 text-white p-4 rounded-xl shadow-md mb-6 no-print flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <span class="text-2xl">📱</span>
                 <div>
-                    <h4 class="font-bold text-sm">Instalirajte kao aplikaciju na telefon ili računar</h4>
-                    <p class="text-xs text-teal-100">Pokrenite direktno sa ekrana bez otvaranja pretraživača</p>
+                    <h4 class="font-bold text-sm">Instalacija klijentske aplikacije na mobilni uređaj ili stacionarni računar</h4>
+                    <p class="text-xs text-teal-100">Omogućava neposredno pokretanje sa matičnog ekrana bez posredstva internet pregledača</p>
                 </div>
             </div>
             <button onclick="installPWA()" class="bg-white text-teal-800 font-bold text-xs px-4 py-2 rounded-lg hover:bg-teal-50 transition-all shadow">Instaliraj</button>
@@ -88,15 +88,15 @@
         <!-- GLOBALNI PRETRAŽIVAČ LOKACIJA -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mb-6 no-print">
             <h3 class="text-sm font-bold text-slate-700 mb-2 flex items-center gap-1.5">
-                🔍 Pronađi lokaciju artikla u magacinu
+                🔍 Identifikacija i lociranje artikala unutar skladišnih jedinica
             </h3>
             <div class="relative">
-                <input type="text" id="search-input" oninput="izvrsiPretragu()" placeholder="Ukucaj dio ili čitavu šifru artikla (npr. 3342.22)..." class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-4 py-3 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all">
+                <input type="text" id="search-input" oninput="izvrsiPretragu()" placeholder="Unesite identifikacionu šifru artikla ili njen deo (npr. 3342.22)..." class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-4 py-3 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all">
                 <span class="absolute left-4 top-3.5 text-slate-400">🔍</span>
             </div>
             <!-- Rezultati pretrage -->
             <div id="search-results-container" class="hidden mt-4 pt-4 border-t border-slate-100">
-                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2" id="search-results-title">Pronađene lokacije:</h4>
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2" id="search-results-title">Identifikovane lokacije skladištenja:</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="search-results-grid">
                     <!-- Dinamički popunjava JS -->
                 </div>
@@ -107,13 +107,13 @@
         <div class="border-b border-slate-200 mb-6 no-print">
             <nav class="flex space-x-4" aria-label="Tabs">
                 <button onclick="switchTab('unos')" id="tab-unos" class="border-teal-600 text-teal-700 px-3 py-2 font-semibold text-sm border-b-2 focus:outline-none transition-all duration-150">
-                    ✍️ 1. Unos Podataka
+                    ✍️ 1. Evidencija i unos podataka
                 </button>
                 <button onclick="switchTab('izvestaj')" id="tab-izvestaj" class="border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 px-3 py-2 font-medium text-sm border-b-2 focus:outline-none transition-all duration-150">
-                    📊 2. Zbirni Izvještaj (Sabrano)
+                    📊 2. Konsolidovani izveštaj o zalihama
                 </button>
                 <button onclick="switchTab('mapa')" id="tab-mapa" class="border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 px-3 py-2 font-medium text-sm border-b-2 focus:outline-none transition-all duration-150">
-                    🗺️ 3. Vizuelna Mapa za Štampu
+                    🗺️ 3. Šematski prikaz skladišnih pozicija
                 </button>
             </nav>
         </div>
@@ -121,20 +121,20 @@
         <!-- Brze akcije -->
         <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 no-print">
             <div>
-                <h3 class="text-sm font-semibold text-slate-700">Akcije sa tabelom</h3>
-                <p class="text-xs text-slate-400">Izvezi podatke u Excel ili upravljaj stanjem</p>
+                <h3 class="text-sm font-semibold text-slate-700">Administracija i upravljanje podacima</h3>
+                <p class="text-xs text-slate-400">Izvoz skladišne baze podataka ili upravljanje konfiguracijom stanja</p>
             </div>
             <div class="flex flex-wrap gap-2 w-full md:w-auto">
                 <button onclick="exportToExcel()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center justify-center gap-2 shadow-sm transition-all w-full sm:w-auto">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Preuzmi Sređen Excel (.xlsx)
+                    Izvezi podatke u Excel (.xlsx) format
                 </button>
                 <button onclick="printMap()" id="btn-print" class="hidden bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-lg font-medium text-sm items-center justify-center gap-2 shadow-sm transition-all w-full sm:w-auto">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                    Odštampaj Mapu
+                    Generiši dokument za štampu šeme
                 </button>
                 <button onclick="resetToSample()" id="btn-reset-sample" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg font-medium text-sm transition-all w-full sm:w-auto text-center">
-                    Resetuj na Test Podatke
+                    Obnovi testnu konfiguraciju podataka
                 </button>
             </div>
         </div>
@@ -142,64 +142,56 @@
         <!-- TAB 1: UNOS PODATAKA -->
         <div id="section-unos" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Formular za brzi unos (Samo za admine) -->
+                <!-- Formular za brzi unos (Samo za autorizovane administratore) -->
                 <div id="form-container" class="bg-white rounded-xl shadow-sm p-6 border border-slate-100 h-fit">
                     <!-- Prikazuje se gostima -->
                     <div id="form-guest-blocker" class="text-center py-8 space-y-3">
                         <span class="text-4xl">🔒</span>
-                        <h3 class="font-bold text-slate-700">Režim samo za čitanje</h3>
-                        <p class="text-xs text-slate-400 px-4">Za dodavanje i brisanje artikala, prijavite se kao administrator klikom na dugme u gornjem desnom uglu.</p>
+                        <h3 class="font-bold text-slate-700">Autorizacija neophodna</h3>
+                        <p class="text-xs text-slate-400 px-4">Modifikacija baze podataka (unos, izmena i brisanje stavki) je onemogućena u gostujućem režimu rada. Molimo Vas da se autorizujete kao administrator radi daljih aktivnosti.</p>
                     </div>
                     
                     <!-- Prikazuje se isključivo adminu -->
                     <form id="add-form" onsubmit="addNewRecord(event)" class="hidden space-y-4">
                         <h2 class="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2">
-                            📥 Unesi artikal na lokaciju
+                            📥 Protokol o skladištenju stavki
                         </h2>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Sektor</label>
-                                <select id="input-sektor" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                                    <option value="C">Sektor C (Gore)</option>
-                                    <option value="B">Sektor B (Sredina)</option>
-                                    <option value="A">Sektor A (Dole)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Raf (1 - 9)</label>
-                                <select id="input-raf" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                                    <option value="1">Raf 1</option>
-                                    <option value="2">Raf 2</option>
-                                    <option value="3">Raf 3</option>
-                                    <option value="4">Raf 4</option>
-                                    <option value="5">Raf 5</option>
-                                    <option value="6">Raf 6</option>
-                                    <option value="7">Raf 7</option>
-                                    <option value="8">Raf 8</option>
-                                    <option value="9">Raf 9</option>
-                                </select>
-                            </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Skladišna zona / Magacin</label>
+                            <select id="input-magacin" onchange="adaptirajUnosFormu()" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <option value="Magacin 1">Magacin 1</option>
+                                <option value="Magacin 2">Magacin 2</option>
+                                <option value="Drive In">Drive In</option>
+                            </select>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Red (1 - 12)</label>
-                                <input type="number" id="input-red" min="1" max="12" required placeholder="Npr. 3" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Sistem regala (Raf)</label>
+                                <select id="input-raf" onchange="adaptirajUnosFormu()" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                    <!-- Popunjava JS -->
+                                </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Nivo (1 - 5)</label>
-                                <input type="number" id="input-nivo" min="1" max="5" required placeholder="Npr. 1" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Vertikalni nivo</label>
+                                <select id="input-nivo" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                    <!-- Popunjava JS -->
+                                </select>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Artikal (Slobodno L/D na kraju)</label>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1" id="label-red">Horizontalna pregrada / Polje (1 - 36)</label>
+                            <input type="number" id="input-red" min="1" required placeholder="Npr. 3" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Identifikaciona oznaka artikla (Sufiks L/D)</label>
                             <input type="text" id="input-artikal" required placeholder="Npr. 3342.22.101L" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 uppercase">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Količina</label>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Količina (Jedinica mere: komad)</label>
                             <input type="number" id="input-kolicina" min="1" required placeholder="Npr. 120" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
                         </div>
                         <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-3 rounded-lg transition-all shadow-sm">
-                            Sačuvaj na Policu
+                            Potvrdi unos i skladištenje
                         </button>
                     </form>
                 </div>
@@ -208,19 +200,19 @@
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 lg:col-span-2 overflow-hidden">
                     <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                         <div>
-                            <h2 class="text-base font-bold text-slate-800">Svi unosi u magacinu</h2>
-                            <p class="text-xs text-slate-400">Pregled svih pojedinačnih unosa po koordinatama</p>
+                            <h2 class="text-base font-bold text-slate-800">Pregled pojedinačnih skladišnih zapisa</h2>
+                            <p class="text-xs text-slate-400">Sveobuhvatna evidencija svih unosa klasifikovanih prema koordinatnim parametrima</p>
                         </div>
-                        <span id="record-count" class="bg-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-full font-semibold">0 unosa</span>
+                        <span id="record-count" class="bg-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-full font-semibold">0 zapisa</span>
                     </div>
                     <div class="overflow-x-auto max-h-[500px]">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="border-b border-slate-200 bg-slate-100/50">
-                                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Lokacija</th>
-                                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Artikal</th>
-                                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Količina</th>
-                                    <th class="action-column px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center hidden">Akcija</th>
+                                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Lokacijski parametri</th>
+                                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Identifikaciona oznaka</th>
+                                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Količinsko stanje</th>
+                                    <th class="action-column px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center hidden">Administrativne akcije</th>
                                 </tr>
                             </thead>
                             <tbody id="table-unos-body" class="divide-y divide-slate-100">
@@ -237,17 +229,17 @@
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden max-w-2xl mx-auto">
                 <div class="px-6 py-5 border-b border-slate-100 bg-teal-50 flex justify-between items-center">
                     <div>
-                        <h2 class="text-base font-bold text-teal-900">Zbirno stanje po artiklima</h2>
-                        <p class="text-xs text-teal-700">Artikli L i D se tretiraju i sabiraju potpuno odvojeno</p>
+                        <h2 class="text-base font-bold text-teal-900">Konsolidovani izveštaj o zalihama</h2>
+                        <p class="text-xs text-teal-700">Napomena: Artikli sa sufiksima L i D klasifikuju se i konsoliduju kao nezavisne stavke</p>
                     </div>
-                    <span class="bg-teal-200 text-teal-800 text-xs px-2.5 py-1 rounded-full font-bold">Zajednički zbir</span>
+                    <span class="bg-teal-200 text-teal-800 text-xs px-2.5 py-1 rounded-full font-bold">Sumarni proračun</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b border-slate-200 bg-slate-50">
-                                <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Artikal (Šifra)</th>
-                                <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Ukupna Količina</th>
+                                <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Artikal (Identifikaciona oznaka)</th>
+                                <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Ukupno količinsko stanje</th>
                             </tr>
                         </thead>
                         <tbody id="table-izvestaj-body" class="divide-y divide-slate-100">
@@ -260,115 +252,52 @@
 
         <!-- TAB 3: VIZUELNA MAPA (MAGACINSKA MREŽA) -->
         <div id="section-mapa" class="hidden print-area">
-            <!-- Selector Rafa za brzu navigaciju na mapi -->
-            <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mb-6 no-print flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
-                    <h3 class="font-bold text-slate-800 text-sm">Izaberi Raf za prikaz mape:</h3>
-                    <p class="text-xs text-slate-400">Trenutno gledate detaljnu mrežu izabranog rafa</p>
+            <!-- Selektor Magacina i Rafa za brzu navigaciju na mapi -->
+            <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm mb-6 no-print space-y-4">
+                <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-100 pb-3 gap-2">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm">Selektujte skladišnu jedinicu / zonu:</h3>
+                        <p class="text-xs text-slate-400">Specifične strukturne mreže su predefinisane za svaku skladišnu zonu zasebno</p>
+                    </div>
+                    <div class="flex gap-2" id="magacin-selector-container">
+                        <button onclick="promeniMagacinNaMapi('Magacin 1')" id="btn-mag-1" class="px-4 py-2 font-bold text-xs rounded transition-all">Magacin 1</button>
+                        <button onclick="promeniMagacinNaMapi('Magacin 2')" id="btn-mag-2" class="px-4 py-2 font-bold text-xs rounded transition-all">Magacin 2</button>
+                        <button onclick="promeniMagacinNaMapi('Drive In')" id="btn-mag-di" class="px-4 py-2 font-bold text-xs rounded transition-all">Drive In</button>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-1.5" id="raf-selector-container">
-                    <!-- JS generiše dugmad -->
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm">Selektujte regalni sistem (Raf):</h3>
+                        <p class="text-xs text-slate-400">Prikaz detaljne strukturne mreže odabranog regalnog sistema</p>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5" id="raf-selector-container">
+                        <!-- JS generiše dugmad -->
+                    </div>
                 </div>
             </div>
 
             <!-- Vizuelna mreža -->
             <div class="bg-white p-6 border-2 border-slate-300 rounded-xl shadow-lg print-area">
                 <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-slate-800 tracking-tight uppercase" id="print-map-title">PLAN I RASPODELA - RAF 1</h2>
-                    <p class="text-xs text-slate-400 mt-1">Sektori: C (Gore), B (Sredina), A (Dole) | Kolone: Redovi 1 - 12 | Redovi: Nivoi 1 - 5</p>
-                    <p class="text-xs text-teal-600 font-semibold mt-1 no-print admin-only-text hidden">💡 Savjet: Pošto ste prijavljeni kao admin, možete kliknuti na bilo koji artikal na mapi da ga direktno obrišete!</p>
+                    <h2 class="text-2xl font-bold text-slate-800 tracking-tight uppercase" id="print-map-title">ŠEMATSKI PRIKAZ - MAGACIN 1, RAF 1</h2>
+                    <p class="text-xs text-slate-400 mt-1" id="print-map-subtitle">Konfiguracija: Kolone označavaju polja, a redovi nivoe polica</p>
+                    <p class="text-xs text-teal-600 font-semibold mt-1 no-print admin-only-text hidden">💡 Napomena: U administratorskom režimu rada, pojedinačno uklanjanje stavki vrši se neposrednim klikom na izabrano polje na šematskom prikazu.</p>
                 </div>
 
                 <!-- Glavni kontejner mape -->
-                <div class="space-y-8">
-                    <!-- SEKTOR C -->
+                <div class="space-y-8 overflow-x-auto">
                     <div>
-                        <div class="bg-slate-100 border-2 border-b-0 border-slate-800 text-slate-800 text-center py-1.5 font-bold tracking-wider text-xs">
-                            SEKTOR C (GORNJI NIVO / POLICE)
+                        <div id="sektor-header-title" class="bg-slate-100 border-2 border-b-0 border-slate-800 text-slate-800 text-center py-1.5 font-bold tracking-wider text-xs uppercase">
+                            MREŽA POLICA I NIVOA
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto min-w-[800px]">
                             <table class="w-full border-collapse border-2 border-slate-800 text-[10px]">
                                 <thead>
-                                    <tr class="bg-slate-50 divide-x-2 divide-slate-800 border-b-2 border-slate-800">
-                                        <th class="w-12 text-center font-bold bg-slate-200 text-xs">Nivo</th>
-                                        <!-- Redovi 1-12 zaglavlja -->
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 1</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 2</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 3</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 4</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 5</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 6</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 7</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 8</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 9</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 10</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 11</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 12</th>
+                                    <tr class="bg-slate-50 divide-x-2 divide-slate-800 border-b-2 border-slate-800" id="grid-header-row">
+                                        <!-- Popunjava JS -->
                                     </tr>
                                 </thead>
-                                <tbody id="grid-C-body">
-                                    <!-- Popunjava JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- SEKTOR B -->
-                    <div>
-                        <div class="bg-slate-100 border-2 border-b-0 border-slate-800 text-slate-800 text-center py-1.5 font-bold tracking-wider text-xs">
-                            SEKTOR B (SREDNJI NIVO / POLICE)
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full border-collapse border-2 border-slate-800 text-[10px]">
-                                <thead>
-                                    <tr class="bg-slate-50 divide-x-2 divide-slate-800 border-b-2 border-slate-800">
-                                        <th class="w-12 text-center font-bold bg-slate-200 text-xs">Nivo</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 1</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 2</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 3</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 4</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 5</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 6</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 7</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 8</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 9</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 10</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 11</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 12</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="grid-B-body">
-                                    <!-- Popunjava JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- SEKTOR A -->
-                    <div>
-                        <div class="bg-slate-100 border-2 border-b-0 border-slate-800 text-slate-800 text-center py-1.5 font-bold tracking-wider text-xs">
-                            SEKTOR A (DONJI NIVO / POLICE)
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full border-collapse border-2 border-slate-800 text-[10px]">
-                                <thead>
-                                    <tr class="bg-slate-50 divide-x-2 divide-slate-800 border-b-2 border-slate-800">
-                                        <th class="w-12 text-center font-bold bg-slate-200 text-xs">Nivo</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 1</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 2</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 3</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 4</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 5</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-teal-50/50">RED 6</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 7</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 8</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 9</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 10</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 11</th>
-                                        <th colspan="2" class="py-1.5 text-center font-bold text-[11px] bg-slate-100">RED 12</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="grid-A-body">
+                                <tbody id="grid-map-body">
                                     <!-- Popunjava JS -->
                                 </tbody>
                             </table>
@@ -385,36 +314,67 @@
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Prošireni početni test podaci raspoređeni na više različitih rafova (1-9)
+        // Konfiguracija rasporeda skladišnog prostora
+        const MAGACINI_CONFIG = {
+            "Magacin 1": {
+                rafovi: {
+                    1: { levels: ["C", "B", "A"], cols: 36, label: "RAF 1 (12 polja x 3 p.m.)" },
+                    2: { levels: ["C", "B", "A"], cols: 25, label: "RAF 2 (7 p. po 3 p.m. + 2 p. sa 2 p.m.)" },
+                    3: { levels: ["C", "B", "A"], cols: 25, label: "RAF 3 (7 p. po 3 p.m. + 2 p. sa 2 p.m.)" },
+                    4: { levels: ["C", "B", "A"], cols: 25, label: "RAF 4 (7 p. po 3 p.m. + 2 p. sa 2 p.m.)" },
+                    5: { levels: ["C", "B", "A"], cols: 25, label: "RAF 5 (7 p. po 3 p.m. + 2 p. sa 2 p.m.)" },
+                    6: { levels: ["C", "B", "A"], cols: 40, label: "RAF 6 (1 p. po 4 p.m. + 12 p. po 3 p.m.)" },
+                    7: { levels: ["E", "D", "C", "B", "A"], cols: 6, label: "RAF 7 - Pored vrata (2 polja x 3 p.m.)" }
+                }
+            },
+            "Magacin 2": {
+                rafovi: {
+                    1: { levels: ["E", "D", "C", "B", "A"], cols: 17, label: "RAF 1 (17 polja x 1 p.m.)" },
+                    2: { levels: ["D", "C", "B", "A"], cols: 18, label: "RAF 2 (18 polja x 1 p.m.)" },
+                    3: { levels: ["D", "C", "B", "A"], cols: 18, label: "RAF 3 (18 polja x 1 p.m.)" }
+                }
+            },
+            "Drive In": {
+                rafovi: {
+                    1: { levels: ["D", "C", "B", "A"], cols: 45, label: "RAF 1 (45 kanala/mesta)" },
+                    2: { levels: ["D", "C", "B", "A"], cols: 50, label: "RAF 2 (50 kanala/mesta)" },
+                    3: { levels: ["D", "C", "B", "A"], cols: 50, label: "RAF 3 (50 kanala/mesta)" },
+                    4: { levels: ["D", "C", "B", "A"], cols: 50, label: "RAF 4 (50 kanala/mesta)" },
+                    5: { levels: ["D", "C", "B", "A"], cols: 45, label: "RAF 5 (45 kanala/mesta)" }
+                }
+            }
+        };
+
+        // Predefinisani podaci za testiranje i demonstraciju
         const SAMPLE_DATA = [
-            // Raf 1 Podaci
-            { id: 1,  sektor: 'C', raf: 1, red: 1, nivo: 1, artikal: '3342.22.101L', kolicina: 432 },
-            { id: 2,  sektor: 'C', raf: 1, red: 2, nivo: 1, artikal: '3341.00.101', kolicina: 346 },
-            { id: 3,  sektor: 'C', raf: 1, red: 3, nivo: 2, artikal: '1301.18.101', kolicina: 2734 },
-            { id: 4,  sektor: 'C', raf: 1, red: 4, nivo: 1, artikal: '1304.21.101', kolicina: 325 },
-            { id: 5,  sektor: 'C', raf: 1, red: 5, nivo: 3, artikal: '1306.21.101', kolicina: 4512 },
-            { id: 6,  sektor: 'C', raf: 1, red: 6, nivo: 1, artikal: '3342.22.101L', kolicina: 124 },
-            { id: 7,  sektor: 'B', raf: 1, red: 1, nivo: 1, artikal: '1541.18.101', kolicina: 4322 },
-            { id: 8,  sektor: 'B', raf: 1, red: 2, nivo: 1, artikal: '1542.18.101', kolicina: 543 },
-            { id: 9,  sektor: 'B', raf: 1, red: 3, nivo: 4, artikal: '1851.61.400', kolicina: 942 },
-            { id: 10, sektor: 'B', raf: 1, red: 4, nivo: 1, artikal: '3341.22.101', kolicina: 547 },
-            { id: 11, sektor: 'B', raf: 1, red: 5, nivo: 2, artikal: '3342.22.101D', kolicina: 543 },
-            { id: 12, sektor: 'B', raf: 1, red: 6, nivo: 1, artikal: '3342.25.301', kolicina: 654 },
-            { id: 13, sektor: 'A', raf: 1, red: 1, nivo: 1, artikal: '1304.21.101', kolicina: 163 },
-            { id: 14, sektor: 'A', raf: 1, red: 2, nivo: 1, artikal: '1302.18.101L', kolicina: 434 },
-            { id: 15, sektor: 'A', raf: 1, red: 3, nivo: 1, artikal: '1302.18.101L', kolicina: 567 },
-            { id: 16, sektor: 'A', raf: 1, red: 4, nivo: 1, artikal: '1600.17.632', kolicina: 6789 },
-            { id: 17, sektor: 'A', raf: 1, red: 5, nivo: 1, artikal: '1600.81.212', kolicina: 755 },
-            { id: 18, sektor: 'A', raf: 1, red: 6, nivo: 1, artikal: '1600.82.212', kolicina: 351 },
+            // Magacin 1, Raf 1 (Glavne police)
+            { id: 1,  magacin: 'Magacin 1', raf: 1, red: 1, nivo: 'A', artikal: '3342.22.101L', kolicina: 432 },
+            { id: 2,  magacin: 'Magacin 1', raf: 1, red: 2, nivo: 'A', artikal: '3341.00.101', kolicina: 346 },
+            { id: 3,  magacin: 'Magacin 1', raf: 1, red: 3, nivo: 'B', artikal: '1301.18.101', kolicina: 2734 },
+            { id: 4,  magacin: 'Magacin 1', raf: 1, red: 36, nivo: 'C', artikal: '3342.22.101L', kolicina: 124 },
+            
+            // Magacin 1, Raf 2
+            { id: 5,  magacin: 'Magacin 1', raf: 2, red: 1, nivo: 'B', artikal: '1541.18.101', kolicina: 4322 },
+            { id: 6,  magacin: 'Magacin 1', raf: 2, red: 25, nivo: 'A', artikal: '3342.22.101D', kolicina: 543 },
+            
+            // Magacin 1, Raf 7 (Onaj pored vrata sa 5 nivoa visine)
+            { id: 7,  magacin: 'Magacin 1', raf: 7, red: 1, nivo: 'E', artikal: '3342.25.301', kolicina: 654 },
+            { id: 8,  magacin: 'Magacin 1', raf: 7, red: 6, nivo: 'A', artikal: '1304.21.101', kolicina: 163 },
 
-            // Raf 2 Podaci
-            { id: 19, sektor: 'C', raf: 2, red: 1, nivo: 1, artikal: '3342.22.101D', kolicina: 110 },
-            { id: 20, sektor: 'B', raf: 2, red: 3, nivo: 3, artikal: '1851.61.400', kolicina: 220 },
-            { id: 21, sektor: 'A', raf: 2, red: 12, nivo: 5, artikal: '1600.81.212', kolicina: 400 },
+            // Magacin 2, Raf 1 (17 polja)
+            { id: 9,  magacin: 'Magacin 2', raf: 1, red: 1, nivo: 'E', artikal: '1302.18.101L', kolicina: 434 },
+            { id: 10, magacin: 'Magacin 2', raf: 1, red: 17, nivo: 'A', artikal: '1302.18.101L', kolicina: 567 },
 
-            // Raf 3 Podaci
-            { id: 22, sektor: 'C', raf: 3, red: 5, nivo: 2, artikal: '1306.21.101', kolicina: 880 },
-            { id: 23, sektor: 'A', raf: 3, red: 1, nivo: 1, artikal: '1302.18.101D', kolicina: 90 }
+            // Magacin 2, Raf 2 (18 polja)
+            { id: 11, magacin: 'Magacin 2', raf: 2, red: 5, nivo: 'D', artikal: '1600.17.632', kolicina: 6789 },
+            { id: 12, magacin: 'Magacin 2', raf: 2, red: 18, nivo: 'B', artikal: '1600.81.212', kolicina: 755 },
+
+            // Drive In, Raf 1 (45 kanala)
+            { id: 13, magacin: 'Drive In', raf: 1, red: 1, nivo: 'D', artikal: '1600.82.212', kolicina: 351 },
+            { id: 14, magacin: 'Drive In', raf: 1, red: 45, nivo: 'A', artikal: '1851.61.400', kolicina: 220 },
+
+            // Drive In, Raf 3 (50 kanala)
+            { id: 15, magacin: 'Drive In', raf: 3, red: 50, nivo: 'B', artikal: '1600.81.212', kolicina: 400 }
         ];
 
         // Globalne varijable aplikacije
@@ -423,14 +383,16 @@
         let auth = null;
         let docRef = null;
         let isUsingCloud = false;
+        
+        // Stanje vizuelne mape
+        let trenutnoIzabraniMagacinNaMapi = 'Magacin 1';
         let trenutnoIzabraniRafNaMapi = 1;
         let isAdmin = false;
 
         // --- PWA PODRŠKA ---
-        // Generisanje manifesta kao Data URI tako da sve ostane u 1 fajlu
         const manifest = {
-            "name": "Magacin Koordinator",
-            "short_name": "Magacin",
+            "name": "Sistem za Koordinaciju Skladišta",
+            "short_name": "SKS",
             "start_url": ".",
             "display": "standalone",
             "background_color": "#115e59",
@@ -448,18 +410,13 @@
         const manifestURL = URL.createObjectURL(manifestBlob);
         document.getElementById('pwa-manifest').setAttribute('href', manifestURL);
 
-        // Registracija inline Service Worker-a
         if ('serviceWorker' in navigator) {
-            const swCode = `
-                self.addEventListener('install', (e) => { self.skipWaiting(); });
-                self.addEventListener('fetch', (e) => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
-            `;
+            const swCode = "self.addEventListener('install', (e) => { self.skipWaiting(); }); self.addEventListener('fetch', (e) => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });";
             const swBlob = new Blob([swCode], {type: 'application/javascript'});
             const swUrl = URL.createObjectURL(swBlob);
             navigator.serviceWorker.register(swUrl).catch(err => console.log("SW offline registration bypassed"));
         }
 
-        // Hvatanje PWA događaja za instalaciju
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -480,10 +437,9 @@
             }
         }
         window.installPWA = installPWA;
-
         // --- KRAJ PWA PODRŠKE ---
 
-        // Inicijalizacija baze
+        // Inicijalizacija baze na v5 verziju kako bi se izbjegla kolizija starih i novih struktura baze
         const initCloudSync = async () => {
             try {
                 if (typeof __firebase_config !== 'undefined' && __firebase_config) {
@@ -501,7 +457,7 @@
 
                     onAuthStateChanged(auth, (user) => {
                         if (user) {
-                            docRef = doc(db, 'artifacts', appId, 'public', 'data', 'magacin', 'trenutno_stanje_v4');
+                            docRef = doc(db, 'artifacts', appId, 'public', 'data', 'magacin', 'trenutno_stanje_v5');
                             
                             onSnapshot(docRef, (docSnap) => {
                                 if (docSnap.exists()) {
@@ -509,7 +465,7 @@
                                     renderTabelaUnos();
                                     prikaziIzvestaj();
                                     renderujMapu();
-                                    izvrsiPretragu(); // ponovi pretragu ako se baza promenila
+                                    izvrsiPretragu();
                                 } else {
                                     setDoc(docRef, { stavke: magacinData });
                                 }
@@ -525,12 +481,12 @@
                         }
                     });
                 } else {
-                    azurirajStatusSinhronizacije(false, "Lokalni režim (Bez interneta)");
+                    azurirajStatusSinhronizacije(false, "Lokalni rad (Odsustvo mrežne sinhronizacije)");
                     renderTabelaUnos();
                 }
             } catch (e) {
                 console.error("Inicijalizacija oblaka neuspešna:", e);
-                azurirajStatusSinhronizacije(false, "Samo na ovom uređaju");
+                azurirajStatusSinhronizacije(false, "Izolovani lokalni profil");
                 renderTabelaUnos();
             }
         };
@@ -543,11 +499,11 @@
             if (povezano) {
                 dot.className = "relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400";
                 ping.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
-                text.innerText = prilagodjenTekst || "Sinhronizovano (Oblak)";
+                text.innerText = prilagodjenTekst || "Mrežna sinhronizacija aktivna";
             } else {
                 dot.className = "relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500";
                 ping.className = "absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-0";
-                text.innerText = prilagodjenTekst || "Lokalna memorija";
+                text.innerText = prilagodjenTekst || "Lokalni režim rada";
             }
         }
 
@@ -572,17 +528,15 @@
         // --- ADMIN REŽIM ---
         function toggleAdminMode() {
             if (isAdmin) {
-                // Odjava
                 isAdmin = false;
                 azurirajAdminInterfejs();
             } else {
-                // Prijava
-                const pass = prompt("Unesite administratorsku šifru za izmjenu podataka:");
-                if (pass === "admin123") { // OVDE MOŽEŠ PROMENITI ŠIFRU
+                const pass = prompt("Unesite administratorsku lozinku za izmenu podataka:");
+                if (pass === "admin123") {
                     isAdmin = true;
                     azurirajAdminInterfejs();
                 } else if (pass !== null) {
-                    alert("Pogrešna šifra!");
+                    alert("Uneta lozinka je neispravna.");
                 }
             }
         }
@@ -601,7 +555,7 @@
             if (isAdmin) {
                 btn.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs px-3.5 py-1.5 rounded-lg font-bold flex items-center gap-1.5 shadow transition-all";
                 lockIcon.innerText = "🔓";
-                statusTxt.innerText = "Admin aktivan (Odjavi se)";
+                statusTxt.innerText = "Autorizovan režim (Odjava)";
                 
                 formBlocker.classList.add('hidden');
                 form.classList.remove('hidden');
@@ -612,7 +566,7 @@
             } else {
                 btn.className = "bg-amber-500 hover:bg-amber-600 text-teal-950 text-xs px-3.5 py-1.5 rounded-lg font-bold flex items-center gap-1.5 shadow transition-all";
                 lockIcon.innerText = "🔒";
-                statusTxt.innerText = "Gost (Samo čitanje)";
+                statusTxt.innerText = "Gostujući režim (Samo pregled)";
                 
                 formBlocker.classList.remove('hidden');
                 form.classList.add('hidden');
@@ -634,7 +588,7 @@
 
             if (query === "") {
                 resultsContainer.classList.add('hidden');
-                renderujMapu(); // ukloni osvetljenja sa mape
+                renderujMapu();
                 return;
             }
 
@@ -644,7 +598,7 @@
                 resultsContainer.classList.remove('hidden');
                 resultsGrid.innerHTML = `
                     <div class="col-span-full p-4 bg-slate-100 rounded-lg text-center text-xs text-slate-500 font-medium">
-                        Artikal "${query}" nije pronađen ni na jednoj lokaciji.
+                        Artikal pod šifrom "${query}" nije lociran u skladišnim jedinicama.
                     </div>
                 `;
             } else {
@@ -653,30 +607,30 @@
                 matches.forEach(item => {
                     const card = document.createElement('div');
                     card.className = "bg-teal-50 border border-teal-200 p-3 rounded-xl flex items-center justify-between shadow-sm cursor-pointer hover:border-teal-400 transition-all";
-                    // Klikom na karticu, otvori mapu i selektuj taj Raf
                     card.onclick = () => {
                         switchTab('mapa');
+                        promeniMagacinNaMapi(item.magacin);
                         promeniRafNaMapi(item.raf);
                     };
                     card.innerHTML = `
                         <div>
                             <span class="block text-xs font-bold text-teal-800 font-mono tracking-wider">${item.artikal}</span>
                             <span class="block text-[11px] text-slate-500 mt-1">
-                                Sektor <strong class="text-slate-800">${item.sektor}</strong>, 
-                                Raf <strong class="text-slate-800">${item.raf}</strong>, 
-                                Red <strong class="text-slate-800">${item.red}</strong>, 
+                                <strong class="text-slate-800">${item.magacin}</strong>, 
+                                Regal <strong class="text-slate-800">${item.raf}</strong>, 
+                                Polje <strong class="text-slate-800">${item.red}</strong>, 
                                 Nivo <strong class="text-slate-800">${item.nivo}</strong>
                             </span>
                         </div>
                         <div class="text-right">
-                            <span class="block text-xs font-bold text-teal-900">${Number(item.kolicina).toLocaleString()} kom</span>
+                            <span class="block text-xs font-bold text-teal-900">${Number(item.kolicina).toLocaleString()} kom.</span>
                         </div>
                     `;
                     resultsGrid.appendChild(card);
                 });
             }
 
-            renderujMapu(); // ažuriraj vizuelno svetljenje na mapi
+            renderujMapu();
         }
         window.izvrsiPretragu = izvrsiPretragu;
 
@@ -695,6 +649,7 @@
             if (tabId === 'unos') {
                 document.getElementById('section-unos').classList.remove('hidden');
                 document.getElementById('tab-unos').className = "border-teal-500 text-teal-600 px-3 py-2 font-bold text-sm border-b-2 focus:outline-none transition-all duration-150";
+                adaptirajUnosFormu();
             } else if (tabId === 'izvestaj') {
                 document.getElementById('section-izvestaj').classList.remove('hidden');
                 document.getElementById('tab-izvestaj').className = "border-teal-500 text-teal-600 px-3 py-2 font-bold text-sm border-b-2 focus:outline-none transition-all duration-150";
@@ -704,8 +659,7 @@
                 document.getElementById('btn-print').classList.remove('hidden');
                 document.getElementById('btn-print').classList.add('flex');
                 document.getElementById('tab-mapa').className = "border-teal-500 text-teal-600 px-3 py-2 font-bold text-sm border-b-2 focus:outline-none transition-all duration-150";
-                renderujRafSelektore();
-                renderujMapu();
+                promeniMagacinNaMapi(trenutnoIzabraniMagacinNaMapi);
             }
         }
 
@@ -714,10 +668,10 @@
             tbody.innerHTML = '';
             
             const sortedData = [...magacinData].sort((a, b) => {
-                if (a.sektor !== b.sektor) return b.sektor.localeCompare(a.sektor);
+                if (a.magacin !== b.magacin) return a.magacin.localeCompare(b.magacin);
                 if (a.raf !== b.raf) return a.raf - b.raf;
                 if (a.red !== b.red) return a.red - b.red;
-                return a.nivo - b.nivo;
+                return a.nivo.localeCompare(b.nivo);
             });
 
             sortedData.forEach(row => {
@@ -725,12 +679,12 @@
                 tr.className = "hover:bg-slate-50 transition-all";
                 tr.innerHTML = `
                     <td class="px-6 py-3.5 text-sm font-medium text-slate-700">
-                        <span class="inline-flex items-center px-2 py-1 rounded bg-slate-100 border border-slate-200 text-slate-800 font-bold mr-2 text-xs">
-                            Sektor ${row.sektor}
+                        <span class="inline-flex items-center px-2 py-1 rounded bg-teal-50 border border-teal-200 text-teal-900 font-bold mr-2 text-xs">
+                            ${row.magacin}
                         </span>
                         <span class="text-slate-500 text-xs font-semibold">
-                            Raf: <strong class="text-slate-800">${row.raf}</strong>, 
-                            Red: <strong class="text-slate-800">${row.red}</strong>, 
+                            Regal: <strong class="text-slate-800">${row.raf}</strong>, 
+                            Polje: <strong class="text-slate-800">${row.red}</strong>, 
                             Nivo: <strong class="text-slate-800">${row.nivo}</strong>
                         </span>
                     </td>
@@ -741,7 +695,7 @@
                         ${Number(row.kolicina).toLocaleString()}
                     </td>
                     <td class="action-column px-6 py-3.5 text-center ${isAdmin ? '' : 'hidden'}">
-                        <button onclick="window.deleteRecord(${row.id})" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50 p-1.5 rounded-lg transition-all focus:outline-none" title="Obriši red">
+                        <button onclick="window.deleteRecord(${row.id})" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50 p-1.5 rounded-lg transition-all focus:outline-none" title="Ukloni unos">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </td>
@@ -749,23 +703,78 @@
                 tbody.appendChild(tr);
             });
 
-            document.getElementById('record-count').innerText = `${magacinData.length} unosa`;
+            document.getElementById('record-count').innerText = `${magacinData.length} zapisa`;
         }
+
+        // --- ADAPTIRANJE UNOS FORME NA OSNOVU IZBORA MAGACINA I RAFA ---
+        function adaptirajUnosFormu() {
+            const magacin = document.getElementById('input-magacin').value;
+            const rafSelect = document.getElementById('input-raf');
+            const nivoSelect = document.getElementById('input-nivo');
+            const redInput = document.getElementById('input-red');
+            const redLabel = document.getElementById('label-red');
+
+            const stariIzabraniRaf = parseInt(rafSelect.value) || 1;
+
+            // 1. Popunjavanje rafova za izabrani magacin
+            rafSelect.innerHTML = '';
+            const config = MAGACINI_CONFIG[magacin];
+            Object.keys(config.rafovi).forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r;
+                opt.innerText = config.rafovi[r].label;
+                rafSelect.appendChild(opt);
+            });
+
+            // Zadrži prethodno selektovani ako postoji u novom magacinu
+            if (config.rafovi[stariIzabraniRaf]) {
+                rafSelect.value = stariIzabraniRaf;
+            } else {
+                rafSelect.selectedIndex = 0;
+            }
+
+            const trenutniRaf = parseInt(rafSelect.value);
+            const rafConfig = config.rafovi[trenutniRaf];
+
+            // 2. Podešavanje nivoa
+            nivoSelect.innerHTML = '';
+            rafConfig.levels.forEach(lvl => {
+                const opt = document.createElement('option');
+                opt.value = lvl;
+                opt.innerText = `Nivo ${lvl}`;
+                nivoSelect.appendChild(opt);
+            });
+
+            // 3. Podešavanje kolone (Red/Polje)
+            redLabel.innerText = `Horizontalna pregrada / Polje (Maksimalni opseg: 1 - ${rafConfig.cols})`;
+            redInput.max = rafConfig.cols;
+            if (parseInt(redInput.value) > rafConfig.cols) {
+                redInput.value = rafConfig.cols;
+            }
+        }
+        window.adaptirajUnosFormu = adaptirajUnosFormu;
 
         function addNewRecord(event) {
             event.preventDefault();
             if (!isAdmin) return;
 
-            const sektor = document.getElementById('input-sektor').value;
+            const magacin = document.getElementById('input-magacin').value;
             const raf = parseInt(document.getElementById('input-raf').value);
             const red = parseInt(document.getElementById('input-red').value);
-            const nivo = parseInt(document.getElementById('input-nivo').value);
+            const nivo = document.getElementById('input-nivo').value;
             const artikal = document.getElementById('input-artikal').value.trim().toUpperCase();
             const kolicina = parseInt(document.getElementById('input-kolicina').value);
 
-            const duplikat = magacinData.find(item => item.sektor === sektor && item.raf === raf && item.red === red && item.nivo === nivo);
+            // Validacija granica kolona iz konfiguracije
+            const maxCols = MAGACINI_CONFIG[magacin].rafovi[raf].cols;
+            if (red < 1 || red > maxCols) {
+                alert(`Greška: Koordinatni indeks polja za Raf ${raf} unutar lokacije ${magacin} mora biti u opsegu između 1 i ${maxCols}.`);
+                return;
+            }
+
+            const duplikat = magacinData.find(item => item.magacin === magacin && item.raf === raf && item.red === red && item.nivo === nivo);
             if (duplikat) {
-                if (confirm(`Upozorenje: Na lokaciji Sektor ${sektor}, Raf ${raf}, Red ${red}, Nivo ${nivo} već stoji artikal "${duplikat.artikal}". Želite li da ga prepišete?`)) {
+                if (confirm(`Upozorenje o preklapanju: Na poziciji ${magacin}, Raf ${raf}, Polje ${red}, Nivo ${nivo} već je evidentiran artikal "${duplikat.artikal}". Želite li izvršiti zamenu i prepisati postojeći zapis?`)) {
                     magacinData = magacinData.filter(item => item.id !== duplikat.id);
                 } else {
                     return;
@@ -773,12 +782,11 @@
             }
 
             const novId = magacinData.length > 0 ? Math.max(...magacinData.map(item => item.id)) + 1 : 1;
-            magacinData.push({ id: novId, sektor, raf, red, nivo, artikal, kolicina });
+            magacinData.push({ id: novId, magacin, raf, red, nivo, artikal, kolicina });
             
             sacuvajPromene();
             document.getElementById('add-form').reset();
-            document.getElementById('input-sektor').value = sektor;
-            document.getElementById('input-raf').value = raf;
+            adaptirajUnosFormu();
         }
 
         function deleteRecord(id) {
@@ -789,7 +797,7 @@
 
         function resetToSample() {
             if (!isAdmin) return;
-            if (confirm("Da li sigurno želite vratiti početne test podatke? Trenutno stanje će biti prebrisano.")) {
+            if (confirm("Da li ste sigurni da želite obnoviti predefinisane testne podatke? Trenutno stanje baze podataka biće u potpunosti zamenjeno.")) {
                 magacinData = [...SAMPLE_DATA];
                 sacuvajPromene();
             }
@@ -818,7 +826,7 @@
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="2" class="px-6 py-8 text-center text-slate-400 font-medium">
-                            Nema podataka u bazi. Unesite artikle u prvom tabu.
+                            Nema evidentiranih stavki u bazi podataka. Unesite podatke putem obrasca za unos.
                         </td>
                     </tr>
                 `;
@@ -836,105 +844,153 @@
             });
         }
 
+        // --- MAPA NAVIGACIJA I ISCRTAVANJE ---
+        function promeniMagacinNaMapi(magacin) {
+            trenutnoIzabraniMagacinNaMapi = magacin;
+            trenutnoIzabraniRafNaMapi = 1; // resetuj na raf 1 pri promeni magacina
+            renderujRafSelektore();
+            renderujMapu();
+        }
+        window.promeniMagacinNaMapi = promeniMagacinNaMapi;
+
+        function promeniRafNaMapi(raf) {
+            trenutnoIzabraniRafNaMapi = raf;
+            renderujRafSelektore();
+            renderujMapu();
+        }
+        window.promeniRafNaMapi = promeniRafNaMapi;
+
         function renderujRafSelektore() {
+            // Ažuriraj vizuelni status magacina
+            const btnMag1 = document.getElementById('btn-mag-1');
+            const btnMag2 = document.getElementById('btn-mag-2');
+            const btnMagDi = document.getElementById('btn-mag-di');
+
+            [btnMag1, btnMag2, btnMagDi].forEach(b => {
+                b.className = "bg-white hover:bg-slate-100 text-slate-700 font-medium px-4 py-2 rounded text-xs shadow-sm border border-slate-200 transition-all";
+            });
+
+            if (trenutnoIzabraniMagacinNaMapi === 'Magacin 1') {
+                btnMag1.className = "bg-teal-700 hover:bg-teal-800 text-white font-bold px-4 py-2 rounded text-xs shadow-sm border border-teal-700 transition-all";
+            } else if (trenutnoIzabraniMagacinNaMapi === 'Magacin 2') {
+                btnMag2.className = "bg-teal-700 hover:bg-teal-800 text-white font-bold px-4 py-2 rounded text-xs shadow-sm border border-teal-700 transition-all";
+            } else if (trenutnoIzabraniMagacinNaMapi === 'Drive In') {
+                btnMagDi.className = "bg-teal-700 hover:bg-teal-800 text-white font-bold px-4 py-2 rounded text-xs shadow-sm border border-teal-700 transition-all";
+            }
+
+            // Izgeneriši dugmad za rafove
             const container = document.getElementById('raf-selector-container');
             container.innerHTML = '';
 
-            for (let r = 1; r <= 9; r++) {
+            const config = MAGACINI_CONFIG[trenutnoIzabraniMagacinNaMapi];
+            Object.keys(config.rafovi).forEach(r => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
+                const rafNum = parseInt(r);
                 
-                if (trenutnoIzabraniRafNaMapi === r) {
+                if (trenutnoIzabraniRafNaMapi === rafNum) {
                     btn.className = "bg-teal-600 hover:bg-teal-700 text-white font-bold px-3 py-1.5 rounded text-xs shadow-sm transition-all border border-teal-600";
                 } else {
                     btn.className = "bg-white hover:bg-slate-100 text-slate-700 font-medium px-3 py-1.5 rounded text-xs shadow-sm border border-slate-200 transition-all";
                 }
 
                 btn.innerText = `Raf ${r}`;
-                btn.onclick = () => promeniRafNaMapi(r);
+                btn.onclick = () => promeniRafNaMapi(rafNum);
                 container.appendChild(btn);
-            }
+            });
         }
 
-        function promeniRafNaMapi(r) {
-            trenutnoIzabraniRafNaMapi = r;
-            renderujRafSelektore();
-            renderujMapu();
-        }
-
-        // Klik na ćeliju na vizuelnoj mapi (Za brzo brisanje)
         function klikNaCelijuMape(itemId, artikal, kolicina) {
-            if (!isAdmin) return; // Samo admini mogu kliknuti i brisati
-            if (confirm(`Želite li da obrišete artikal "${artikal}" (Količina: ${kolicina}) sa ove pozicije?`)) {
+            if (!isAdmin) return;
+            if (confirm(`Da li ste sigurni da želite ukloniti artikal "${artikal}" (Količina: ${kolicina}) sa ove skladišne pozicije?`)) {
                 deleteRecord(itemId);
             }
         }
         window.klikNaCelijuMape = klikNaCelijuMape;
 
+        // Isčitavanje i iscrtavanje mreže u realnom vremenu na osnovu dešifrovanog rasporeda
         function renderujMapu() {
-            const sektori = ['C', 'B', 'A'];
-            const izabraniRaf = trenutnoIzabraniRafNaMapi;
+            const magacin = trenutnoIzabraniMagacinNaMapi;
+            const raf = trenutnoIzabraniRafNaMapi;
             const searchQuery = document.getElementById('search-input').value.trim().toUpperCase();
 
-            document.getElementById('print-map-title').innerText = `PLAN I RASPODELA - RAF ${izabraniRaf}`;
+            const config = MAGACINI_CONFIG[magacin].rafovi[raf];
+            document.getElementById('print-map-title').innerText = `${magacin} - ${config.label}`;
+            document.getElementById('print-map-subtitle').innerText = `Nivoi visine: ${config.levels.join(', ')} | Horizontalne pozicije (Polja): 1 do ${config.cols}`;
+
+            // 1. Renderovanje zaglavlja (Kolone)
+            const headerRow = document.getElementById('grid-header-row');
+            headerRow.innerHTML = '';
             
-            sektori.forEach(sek => {
-                const tbody = document.getElementById(`grid-${sek}-body`);
-                tbody.innerHTML = '';
+            const nivoTh = document.createElement('th');
+            nivoTh.className = "w-12 text-center font-bold bg-slate-200 text-xs";
+            nivoTh.innerText = "Nivo";
+            headerRow.appendChild(nivoTh);
 
-                for (let nivo = 1; nivo <= 5; nivo++) {
-                    const tr = document.createElement('tr');
-                    tr.className = "divide-x-2 divide-slate-800 border-b border-slate-400 last:border-b-2 last:border-slate-800 hover:bg-slate-50/50";
-                    
-                    let nivoTd = `<td class="font-bold text-center bg-slate-100 w-12 text-xs border-r-2 border-slate-800">${nivo}</td>`;
-                    let redoviHtml = '';
+            for (let c = 1; c <= config.cols; c++) {
+                const colTh = document.createElement('th');
+                colTh.colSpan = 2;
+                colTh.className = "py-1.5 text-center font-bold text-[10px] bg-slate-100 border-r border-slate-300";
+                colTh.innerText = `P ${c}`;
+                headerRow.appendChild(colTh);
+            }
 
-                    for (let red = 1; red <= 12; red++) {
-                        const pronadjen = magacinData.find(item => 
-                            item.sektor === sek && 
-                            item.raf === izabraniRaf && 
-                            item.red === red && 
-                            item.nivo === nivo
-                        );
+            // 2. Renderovanje nivoa (Redovi tabele)
+            const tbody = document.getElementById('grid-map-body');
+            tbody.innerHTML = '';
+
+            config.levels.forEach(lvl => {
+                const tr = document.createElement('tr');
+                tr.className = "divide-x-2 divide-slate-800 border-b border-slate-400 last:border-b-2 last:border-slate-800 hover:bg-slate-50/50";
+                
+                let nivoTd = `<td class="font-bold text-center bg-slate-100 w-12 text-xs border-r-2 border-slate-800">${lvl}</td>`;
+                let redoviHtml = '';
+
+                for (let col = 1; col <= config.cols; col++) {
+                    const pronadjen = magacinData.find(item => 
+                        item.magacin === magacin && 
+                        item.raf === raf && 
+                        item.red === col && 
+                        item.nivo === lvl
+                    );
+
+                    let bgBoja = "bg-white";
+                    let artikalTekst = "";
+                    let kolicinaTekst = "";
+                    let onclickEvent = "";
+                    let pointerClass = "";
+                    let titleTag = "";
+
+                    if (pronadjen) {
+                        artikalTekst = pronadjen.artikal;
+                        kolicinaTekst = Number(pronadjen.kolicina).toLocaleString();
+                        titleTag = `Artikal: ${artikalTekst}, Količina: ${kolicinaTekst}`;
                         
-                        let bgBoja = "bg-white";
-                        let artikalTekst = "";
-                        let kolicinaTekst = "";
-                        let onclickEvent = "";
-                        let pointerClass = "";
-                        let titleTag = "";
-
-                        if (pronadjen) {
-                            artikalTekst = pronadjen.artikal;
-                            kolicinaTekst = Number(pronadjen.kolicina).toLocaleString();
-                            titleTag = `Artikal: ${artikalTekst}, Količina: ${kolicinaTekst}`;
-                            
-                            // Provera da li se podudara sa pretragom
-                            if (searchQuery !== "" && artikalTekst.includes(searchQuery)) {
-                                bgBoja = "bg-yellow-200 border-2 border-amber-600 animate-pulse text-amber-950 font-black";
-                            } else {
-                                bgBoja = "bg-teal-50/70";
-                            }
-
-                            if (isAdmin) {
-                                pointerClass = "cursor-pointer hover:bg-rose-100 transition-all";
-                                onclickEvent = `onclick="window.klikNaCelijuMape(${pronadjen.id}, '${artikalTekst}', ${pronadjen.kolicina})"`;
-                            }
+                        // Provera da li se podudara sa pretragom
+                        if (searchQuery !== "" && artikalTekst.includes(searchQuery)) {
+                            bgBoja = "bg-yellow-200 border-2 border-amber-600 animate-pulse text-amber-950 font-black";
+                        } else {
+                            bgBoja = "bg-teal-50/70";
                         }
 
-                        redoviHtml += `
-                            <td ${onclickEvent} class="p-1 font-mono text-[9px] truncate max-w-[65px] ${bgBoja} ${pointerClass} text-center font-bold text-slate-700" title="${titleTag}">
-                                ${artikalTekst}
-                            </td>
-                            <td ${onclickEvent} class="p-1 font-sans text-[9px] text-right font-black ${bgBoja} ${pointerClass} text-teal-800 border-r border-dashed border-slate-300 last:border-r-2 last:border-slate-800" title="${titleTag}">
-                                ${kolicinaTekst}
-                            </td>
-                        `;
+                        if (isAdmin) {
+                            pointerClass = "cursor-pointer hover:bg-rose-100 transition-all";
+                            onclickEvent = `onclick="window.klikNaCelijuMape(${pronadjen.id}, '${artikalTekst}', ${pronadjen.kolicina})"`;
+                        }
                     }
 
-                    tr.innerHTML = nivoTd + redoviHtml;
-                    tbody.appendChild(tr);
+                    redoviHtml += `
+                        <td ${onclickEvent} class="p-1 font-mono text-[9px] truncate max-w-[65px] ${bgBoja} ${pointerClass} text-center font-bold text-slate-700" title="${titleTag}">
+                            ${artikalTekst}
+                        </td>
+                        <td ${onclickEvent} class="p-1 font-sans text-[9px] text-right font-black ${bgBoja} ${pointerClass} text-teal-800 border-r border-dashed border-slate-300 last:border-r-2 last:border-slate-800" title="${titleTag}">
+                            ${kolicinaTekst}
+                        </td>
+                    `;
                 }
+
+                tr.innerHTML = nivoTd + redoviHtml;
+                tbody.appendChild(tr);
             });
         }
 
@@ -944,9 +1000,9 @@
 
         function exportToExcel() {
             const sheet1_data = magacinData.map(item => ({
-                "Sektor": item.sektor,
+                "Magacin": item.magacin,
                 "Raf": item.raf,
-                "Red": item.red,
+                "Polje": item.red,
                 "Nivo": item.nivo,
                 "Artikal": item.artikal,
                 "Kolicina": item.kolicina
@@ -962,6 +1018,8 @@
             jedinstveneCisteSifre.forEach((sifra, index) => {
                 if (sifra) {
                     const rowNum = index + 2; 
+                    // Budući da su u listu 'Unos' kolone: A:Magacin, B:Raf, C:Polje, D:Nivo, E:Artikal, F:Kolicina
+                    // Formula pretražuje kolonu E (Artikal) i sabira F (Kolicina)
                     const formulaText = `SUMIF(Unos!E$2:E$1000, A${rowNum}, Unos!F$2:F$1000)`;
                     
                     ws_izvestaj_data.push([
@@ -976,21 +1034,20 @@
             XLSX.utils.book_append_sheet(wb, ws_unos, "Unos");
             XLSX.utils.book_append_sheet(wb, ws_izvestaj, "Zbirni_Izvestaj");
 
-            XLSX.writeFile(wb, "Magacin_Izvestaj_v4.xlsx");
+            XLSX.writeFile(wb, "Skladisni_Izvestaj_v5.xlsx");
         }
 
-        // Ekspozicija funkcija
+        // Ekspozicija funkcija globalnom opsegu
         window.switchTab = switchTab;
         window.addNewRecord = addNewRecord;
         window.deleteRecord = deleteRecord;
         window.resetToSample = resetToSample;
         window.printMap = printMap;
         window.exportToExcel = exportToExcel;
-        window.promeniRafNaMapi = promeniRafNaMapi;
 
         window.onload = function() {
             initCloudSync();
-            azurirajAdminInterfejs(); // postavi inicijalni Gost režim
+            azurirajAdminInterfejs();
         }
     </script>
 </body>
